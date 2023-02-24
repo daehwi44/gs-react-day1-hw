@@ -2,14 +2,18 @@ import { useState } from "react";
 import { ActionButton } from "../components/ActionButton";
 
 export const Janken = () => {
+  
+  //じゃんけん結果の状態
   const [jankenResult, setJankenResult] = useState({
     myHand: "入力待ち",
     comHand: "待機中",
     result: "未対戦",
   });
 
+  //対戦履歴の状態
   const [history, setHistory] = useState([]);
 
+  //ジャン結果を取得する関数
   const getJankenResult = (myHand) => {
     const hand = ["グー", "チョキ", "パー"];
     const myIndex = hand.indexOf(myHand);
@@ -19,6 +23,7 @@ export const Janken = () => {
       ["Lose", "Draw", "Win"],
       ["Win", "Lose", "Draw"],
     ];
+
     return {
       myHand: myHand,
       comHand: hand[comIndex],
@@ -26,12 +31,14 @@ export const Janken = () => {
     };
   };
 
+  //じゃんけん結果の状態変更＆履歴追加
   const getJanken = (myHand) => {
     const result = getJankenResult(myHand);
     setJankenResult(result);
     setHistory([result, ...history]);
   };
 
+  //画面表示
   return (
     <>
       <p>じゃんけんの画面</p>
