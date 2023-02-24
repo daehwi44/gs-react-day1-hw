@@ -10,6 +10,7 @@ export const BookCreate = () => {
   const [geoLocation, setGeoLocation] = useState(null);
   const [place, setPlace] = useState("");
   const [weather, setWeather] = useState("");
+  const [translated, setTranslated] = useState("");
 
   const getBooks = async (keyword) => {
     const url = "https://www.googleapis.com/books/v1/volumes?q=intitle:";
@@ -36,6 +37,25 @@ export const BookCreate = () => {
     );
     console.log(weatherData.data);
     setWeather(weatherJson[weatherData.data.daily.weathercode[0]]);
+    //翻訳のために（よくわからんけどStateのweatherは使えないぽいから変数に入れた）
+    const weather = weatherJson[weatherData.data.daily.weathercode[0]];
+
+    //翻訳
+    const API_KEY = "";
+    const API_URL = "https://api-free.deepl.com/v2/translate";
+    const text = "This is a pen.";
+    let content = encodeURI(
+      "auth_key=" +
+        API_KEY +
+        "&text=" +
+        weather +
+        "&source_lang=EN&target_lang=JA"
+    );
+    let url = API_URL + "?" + content;
+
+    const translateData = await axios.get(url);
+    console.log(translateData.data);
+    setTranslated(translateData.data.translations[0].text);
 
     setLoading(false);
   };
@@ -60,7 +80,7 @@ export const BookCreate = () => {
           </tr>
           <tr>
             <td>天気</td>
-            <td>{weather}</td>
+            <td>{translated}</td>
           </tr>
           <tr>
             <td>読んだ本</td>
